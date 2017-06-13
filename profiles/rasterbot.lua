@@ -1,9 +1,13 @@
 api_version = 2
 -- Rasterbot profile
 
-profile = {
-  force_split_edges = true
-}
+profile = {}
+
+function initialize()
+  profile = {
+    force_split_edges = true
+  }
+end
 
 -- Minimalist node_ and way_functions in order to test source_ and segment_functions
 

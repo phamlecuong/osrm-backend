@@ -8,14 +8,18 @@ Feature: Profile API version 2
            """
 api_version = 2
 
--- set profile properties
-profile = {
-  max_speed_for_map_matching      = 180/3.6,
-  use_turn_restrictions           = true,
-  continue_straight_at_waypoint   = true,
-  weight_name                     = 'test_version2',
-  weight_precision                = 2
-}
+profile = {}
+
+function initialize()
+  -- set profile properties
+  profile = {
+    max_speed_for_map_matching      = 180/3.6,
+    use_turn_restrictions           = true,
+    continue_straight_at_waypoint   = true,
+    weight_name                     = 'test_version2',
+    weight_precision                = 2
+  }
+end
 
 function node_function (node, result)
   print ('node_function ' .. node:id())

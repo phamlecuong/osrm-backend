@@ -11,183 +11,186 @@ local limit = require("lib/maxspeed").limit
 local default_speed = 15
 local walking_speed = 6
 
--- must be global because it's accesed externally
-profile = {
-  max_speed_for_map_matching    = 110/3.6, -- kmph -> m/s
-  use_turn_restrictions         = false,
-  continue_straight_at_waypoint = false,
---weight_name                   = 'cyclability',
-  weight_name                   = 'duration',
+profile = {}
 
-  default_mode              = mode.cycling,
-  default_speed             = 15,
-  oneway_handling           = true,
-  traffic_light_penalty     = 2,
-  u_turn_penalty            = 20,
-  turn_penalty              = 6,
-  turn_bias                 = 1.4,
+function initialize()
+  -- must be global because it's accesed externally
+  profile = {
+    max_speed_for_map_matching    = 110/3.6, -- kmph -> m/s
+    use_turn_restrictions         = false,
+    continue_straight_at_waypoint = false,
+  --weight_name                   = 'cyclability',
+    weight_name                   = 'duration',
 
-  -- reduce the driving speed by 30% for unsafe roads
-  -- local safety_penalty            = 0.7,
-  safety_penalty            = 1.0,
-  use_public_transport      = true,
+    default_mode              = mode.cycling,
+    default_speed             = 15,
+    oneway_handling           = true,
+    traffic_light_penalty     = 2,
+    u_turn_penalty            = 20,
+    turn_penalty              = 6,
+    turn_bias                 = 1.4,
 
-  allowed_start_modes = Set {
-    mode.cycling,
-    mode.pushing_bike
-  },
+    -- reduce the driving speed by 30% for unsafe roads
+    -- local safety_penalty            = 0.7,
+    safety_penalty            = 1.0,
+    use_public_transport      = true,
 
-  barrier_whitelist = Set {
-    'sump_buster',
-    'bus_trap',
-    'cycle_barrier',
-    'bollard',
-    'entrance',
-    'cattle_grid',
-    'border_control',
-    'toll_booth',
-    'sally_port',
-    'gate',
-    'no',
-    'block'
-  },
+    allowed_start_modes = Set {
+      mode.cycling,
+      mode.pushing_bike
+    },
 
-  access_tag_whitelist = Set {
-  	'yes',
-  	'permissive',
-   	'designated'
-  },
+    barrier_whitelist = Set {
+      'sump_buster',
+      'bus_trap',
+      'cycle_barrier',
+      'bollard',
+      'entrance',
+      'cattle_grid',
+      'border_control',
+      'toll_booth',
+      'sally_port',
+      'gate',
+      'no',
+      'block'
+    },
 
-  access_tag_blacklist = Set {
-  	'no',
-   	'private',
-   	'agricultural',
-   	'forestry',
-   	'delivery'
-  },
+    access_tag_whitelist = Set {
+    	'yes',
+    	'permissive',
+     	'designated'
+    },
 
-  restricted_access_tag_list = Set { },
+    access_tag_blacklist = Set {
+    	'no',
+     	'private',
+     	'agricultural',
+     	'forestry',
+     	'delivery'
+    },
 
-  restricted_highway_whitelist = Set { },
+    restricted_access_tag_list = Set { },
 
-  access_tags_hierarchy = Sequence {
-  	'bicycle',
-  	'vehicle',
-  	'access'
-  },
+    restricted_highway_whitelist = Set { },
 
-  restrictions = Set {
-  	'bicycle'
-  },
+    access_tags_hierarchy = Sequence {
+    	'bicycle',
+    	'vehicle',
+    	'access'
+    },
 
-  cycleway_tags = Set {
-  	'track',
-  	'lane',
-  	'opposite',
-  	'opposite_lane',
-  	'opposite_track',
-  	'share_busway',
-  	'sharrow',
-  	'shared'
-  },
+    restrictions = Set {
+    	'bicycle'
+    },
 
-  unsafe_highway_list = Set {
-  	'primary',
-   	'secondary',
-   	'tertiary',
-   	'primary_link',
-   	'secondary_link',
-   	'tertiary_link'
-  },
+    cycleway_tags = Set {
+    	'track',
+    	'lane',
+    	'opposite',
+    	'opposite_lane',
+    	'opposite_track',
+    	'share_busway',
+    	'sharrow',
+    	'shared'
+    },
 
-  service_penalties = {
-    alley             = 0.5,
-  },
+    unsafe_highway_list = Set {
+    	'primary',
+     	'secondary',
+     	'tertiary',
+     	'primary_link',
+     	'secondary_link',
+     	'tertiary_link'
+    },
 
-  bicycle_speeds = {
-    cycleway = default_speed,
-    primary = default_speed,
-    primary_link = default_speed,
-    secondary = default_speed,
-    secondary_link = default_speed,
-    tertiary = default_speed,
-    tertiary_link = default_speed,
-    residential = default_speed,
-    unclassified = default_speed,
-    living_street = default_speed,
-    road = default_speed,
-    service = default_speed,
-    track = 12,
-    path = 12
-  },
+    service_penalties = {
+      alley             = 0.5,
+    },
 
-  pedestrian_speeds = {
-    footway = walking_speed,
-    pedestrian = walking_speed,
-    steps = 2
-  },
+    bicycle_speeds = {
+      cycleway = default_speed,
+      primary = default_speed,
+      primary_link = default_speed,
+      secondary = default_speed,
+      secondary_link = default_speed,
+      tertiary = default_speed,
+      tertiary_link = default_speed,
+      residential = default_speed,
+      unclassified = default_speed,
+      living_street = default_speed,
+      road = default_speed,
+      service = default_speed,
+      track = 12,
+      path = 12
+    },
 
-  railway_speeds = {
-    train = 10,
-    railway = 10,
-    subway = 10,
-    light_rail = 10,
-    monorail = 10,
-    tram = 10
-  },
+    pedestrian_speeds = {
+      footway = walking_speed,
+      pedestrian = walking_speed,
+      steps = 2
+    },
 
-  platform_speeds = {
-    platform = walking_speed
-  },
+    railway_speeds = {
+      train = 10,
+      railway = 10,
+      subway = 10,
+      light_rail = 10,
+      monorail = 10,
+      tram = 10
+    },
 
-  amenity_speeds = {
-    parking = 10,
-    parking_entrance = 10
-  },
+    platform_speeds = {
+      platform = walking_speed
+    },
 
-  man_made_speeds = {
-    pier = walking_speed
-  },
+    amenity_speeds = {
+      parking = 10,
+      parking_entrance = 10
+    },
 
-  route_speeds = {
-    ferry = 5
-  },
+    man_made_speeds = {
+      pier = walking_speed
+    },
 
-  bridge_speeds = {
-    movable = 5
-  },
+    route_speeds = {
+      ferry = 5
+    },
 
-  surface_speeds = {
-    asphalt = default_speed,
-    ["cobblestone:flattened"] = 10,
-    paving_stones = 10,
-    compacted = 10,
-    cobblestone = 6,
-    unpaved = 6,
-    fine_gravel = 6,
-    gravel = 6,
-    pebblestone = 6,
-    ground = 6,
-    dirt = 6,
-    earth = 6,
-    grass = 6,
-    mud = 3,
-    sand = 3,
-    sett = 10
-  },
+    bridge_speeds = {
+      movable = 5
+    },
 
-  tracktype_speeds = {
-  },
+    surface_speeds = {
+      asphalt = default_speed,
+      ["cobblestone:flattened"] = 10,
+      paving_stones = 10,
+      compacted = 10,
+      cobblestone = 6,
+      unpaved = 6,
+      fine_gravel = 6,
+      gravel = 6,
+      pebblestone = 6,
+      ground = 6,
+      dirt = 6,
+      earth = 6,
+      grass = 6,
+      mud = 3,
+      sand = 3,
+      sett = 10
+    },
 
-  smoothness_speeds = {
-  },
+    tracktype_speeds = {
+    },
 
-  avoid = Set {
-    'impassable',
-    'construction'
+    smoothness_speeds = {
+    },
+
+    avoid = Set {
+      'impassable',
+      'construction'
+    }
   }
-}
-
+end
 
 local function parse_maxspeed(source)
     if not source then

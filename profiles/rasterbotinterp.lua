@@ -3,6 +3,11 @@ api_version = 2
 
 -- Minimalist node_ and way_functions in order to test source_ and segment_functions
 
+profile = {}
+
+function initialize()
+end
+
 function node_function (node, result)
 end
 

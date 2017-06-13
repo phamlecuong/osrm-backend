@@ -7,26 +7,29 @@ api_version = 2
 -- Secondary road:  18km/h = 18000m/3600s = 100m/20s
 -- Tertiary road:  12km/h = 12000m/3600s = 100m/30s
 
-profile = {
-  -- these settings are read externally
-  continue_straight_at_waypoint = true,
-  use_turn_restrictions         = true,
-  max_speed_for_map_matching    = 30/3.6, --km -> m/s
-  weight_name                   = 'duration',
+-- these settings are read externally
+profile = {}
 
-  -- used internally
-  uturn_penalty                 = 20,
-  traffic_light_penalty         = 7,     -- seconds
+function initialize()
+  profile = {
+    continue_straight_at_waypoint = true,
+    use_turn_restrictions         = true,
+    max_speed_for_map_matching    = 30/3.6, --km -> m/s
+    weight_name                   = 'duration',
 
-  default_speed  = 24,
-  speeds = {
-    primary = 36,
-    secondary = 18,
-    tertiary = 12,
-    steps = 6,
+    -- used internally
+    uturn_penalty                 = 20,
+    traffic_light_penalty         = 7,     -- seconds
+
+    default_speed  = 24,
+    speeds = {
+      primary = 36,
+      secondary = 18,
+      tertiary = 12,
+      steps = 6,
+    }
   }
-}
-
+end
 
 function limit_speed(speed, limits)
   -- don't use ipairs(), since it stops at the first nil value

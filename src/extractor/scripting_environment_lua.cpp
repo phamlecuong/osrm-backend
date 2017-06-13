@@ -447,24 +447,23 @@ void Sol2ScriptingEnvironment::InitContext(LuaScriptingContext &context)
                               " are supported." + SOURCE_REF);
     }
 
-    // Assert that version-dependent properties were not changed by profile
-    switch (context.api_version)
-    {
-    case 2:
-    case 1:
-        BOOST_ASSERT(context.properties.GetUturnPenalty() == 0);
-        BOOST_ASSERT(context.properties.GetTrafficSignalPenalty() == 0);
-        break;
-    case 0:
-        BOOST_ASSERT(context.properties.GetWeightName() == "duration");
-        break;
-    }
+
 
     // version-dependent parts of the api
     switch (context.api_version)
     {
     case 2:
     {
+        sol::function intialize_function = context.state["initialize"];
+        if (intialize_function.valid())
+            intialize_function();
+        else
+            throw util::exception("Profile must have an initialize() function.");
+
+
+        BOOST_ASSERT(context.properties.GetUturnPenalty() == 0);
+        BOOST_ASSERT(context.properties.GetTrafficSignalPenalty() == 0);
+
         // set constants in 'constants' table
         context.state["constants"] = context.state.create_table_with(
             "max_turn_weight", std::numeric_limits<TurnPenalty>::max());
@@ -507,19 +506,24 @@ void Sol2ScriptingEnvironment::InitContext(LuaScriptingContext &context)
         if (weight_precision != sol::nullopt)
             context.properties.weight_precision = weight_precision.value();
 
+        sol::optional<bool> force_split_edges = context.state["profile"]["force_split_edges"];
+        if (force_split_edges != sol::nullopt)
+            context.properties.force_split_edges = force_split_edges.value();
+
         break;
     }
     case 1:
+        BOOST_ASSERT(context.properties.GetUturnPenalty() == 0);
+        BOOST_ASSERT(context.properties.GetTrafficSignalPenalty() == 0);
         context.state["properties"] = &context.properties;
         break;
     case 0:
+        BOOST_ASSERT(context.properties.GetWeightName() == "duration");
         break;
     }
 
-    sol::optional<bool> force_split_edges = context.state["profile"]["force_split_edges"];
-    if (force_split_edges != sol::nullopt)
-        context.properties.force_split_edges = force_split_edges.value();
 
+    // check lua functions
     sol::function turn_function = context.state["turn_function"];
     sol::function node_function = context.state["node_function"];
     sol::function way_function = context.state["way_function"];
