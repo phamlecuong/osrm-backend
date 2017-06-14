@@ -454,12 +454,17 @@ void Sol2ScriptingEnvironment::InitContext(LuaScriptingContext &context)
     {
     case 2:
     {
+        // call mandatory initialze function
         sol::function intialize_function = context.state["initialize"];
         if (intialize_function.valid())
             intialize_function();
         else
             throw util::exception("Profile must have an initialize() function.");
 
+        // call optional specialize function
+        sol::function specialize_function = context.state["specialize"];
+        if (specialize_function.valid())
+            specialize_function();
 
         BOOST_ASSERT(context.properties.GetUturnPenalty() == 0);
         BOOST_ASSERT(context.properties.GetTrafficSignalPenalty() == 0);

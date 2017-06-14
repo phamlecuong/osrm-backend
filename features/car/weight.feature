@@ -65,7 +65,9 @@ Feature: Car - weights
     Scenario: Distance weights
         Given the profile file "car" extended with
         """
-        profile.weight_name = 'distance'
+        function specialize()
+          profile.weight_name = 'distance'
+        end
         """
 
         Given the node map

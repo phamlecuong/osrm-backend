@@ -31,6 +31,9 @@ function initialize()
   }
 end
 
+function specialize()
+end
+
 function limit_speed(speed, limits)
   -- don't use ipairs(), since it stops at the first nil value
   for i=1, #limits do
